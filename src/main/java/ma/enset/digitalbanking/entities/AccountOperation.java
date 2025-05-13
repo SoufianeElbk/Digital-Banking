@@ -12,7 +12,6 @@ import java.util.Date;
 @Entity
 @Data @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class AccountOperation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
