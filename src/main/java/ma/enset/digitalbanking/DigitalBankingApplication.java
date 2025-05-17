@@ -1,5 +1,6 @@
 package ma.enset.digitalbanking;
 
+import ma.enset.digitalbanking.dtos.CustomerDTO;
 import ma.enset.digitalbanking.entities.*;
 import ma.enset.digitalbanking.enums.AccountStatus;
 import ma.enset.digitalbanking.enums.OperationType;
@@ -28,12 +29,12 @@ public class DigitalBankingApplication {
     }
 
 
-    @Bean
+//    @Bean
     CommandLineRunner commmadLineRunner(BankAccountService bankAccountService) {
         return args -> {
             Stream.of("Soufiane", "Abdelkrim", "Mohammed", "Hassan", "Yassine", "Ahmed").forEach(name -> {
-                Customer customer = new Customer(null, name, name + "@gmail.com", null);
-                bankAccountService.saveCustomer(customer);
+                CustomerDTO customerDTO = new CustomerDTO(null, name, name + "@gmail.com");
+                bankAccountService.saveCustomer(customerDTO);
             });
             bankAccountService.listCustomers().forEach(customer -> {
                 try {
