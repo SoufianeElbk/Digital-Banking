@@ -1,9 +1,11 @@
 package ma.enset.digitalbanking.mappers;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import ma.enset.digitalbanking.dtos.AccountOperationDTO;
 import ma.enset.digitalbanking.dtos.CurrentAccountDTO;
 import ma.enset.digitalbanking.dtos.CustomerDTO;
 import ma.enset.digitalbanking.dtos.SavingAccountDTO;
+import ma.enset.digitalbanking.entities.AccountOperation;
 import ma.enset.digitalbanking.entities.CurrentAccount;
 import ma.enset.digitalbanking.entities.Customer;
 import ma.enset.digitalbanking.entities.SavingAccount;
@@ -97,5 +99,31 @@ public class BankAccountMapperImpl {
         currentAccount.setOverDraft(currentAccountDTO.getOverDraft());
         currentAccount.setCustomer(fromCustomerDTO(currentAccountDTO.getCustomerDTO()));
         return currentAccount;
+    }
+
+    public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation) {
+        if (accountOperation == null) {
+            return null;
+        }
+        AccountOperationDTO accountOperationDTO = new AccountOperationDTO();
+        accountOperationDTO.setId(accountOperation.getId());
+        accountOperationDTO.setOperationDate(accountOperation.getOperationDate());
+        accountOperationDTO.setAmount(accountOperation.getAmount());
+        accountOperationDTO.setType(accountOperation.getType());
+        accountOperationDTO.setDescription(accountOperation.getDescription());
+        return accountOperationDTO;
+    }
+
+    public AccountOperation fromAccountOperationDTO(AccountOperationDTO accountOperationDTO) {
+        if (accountOperationDTO == null) {
+            return null;
+        }
+        AccountOperation accountOperation = new AccountOperation();
+        accountOperation.setId(accountOperationDTO.getId());
+        accountOperation.setOperationDate(accountOperationDTO.getOperationDate());
+        accountOperation.setAmount(accountOperationDTO.getAmount());
+        accountOperation.setType(accountOperationDTO.getType());
+        accountOperation.setDescription(accountOperationDTO.getDescription());
+        return accountOperation;
     }
 }
