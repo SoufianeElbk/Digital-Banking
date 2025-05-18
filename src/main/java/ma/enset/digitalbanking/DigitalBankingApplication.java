@@ -1,5 +1,6 @@
 package ma.enset.digitalbanking;
 
+import ma.enset.digitalbanking.dtos.BankAccountDTO;
 import ma.enset.digitalbanking.dtos.CustomerDTO;
 import ma.enset.digitalbanking.entities.*;
 import ma.enset.digitalbanking.enums.AccountStatus;
@@ -27,8 +28,6 @@ public class DigitalBankingApplication {
     public static void main(String[] args) {
         SpringApplication.run(DigitalBankingApplication.class, args);
     }
-
-
 //    @Bean
     CommandLineRunner commmadLineRunner(BankAccountService bankAccountService) {
         return args -> {
@@ -40,8 +39,8 @@ public class DigitalBankingApplication {
                 try {
                     bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 9000, customer.getId());
                     bankAccountService.saveSavingBankAccount(Math.random() * 120000, 5.5, customer.getId());
-                    List<BankAccount> bankAccounts = bankAccountService.bankAccountList();
-                    for (BankAccount account : bankAccounts) {
+                    List<BankAccountDTO> bankAccountsDTO = bankAccountService.bankAccountList();
+                    for (BankAccountDTO account : bankAccountsDTO) {
                         for (int i = 0; i < 10; i++) {
                             bankAccountService.credit(account.getId(), 1000 + Math.random() * 12000, "Credit");
                             bankAccountService.debit(account.getId(), 1000 + Math.random() * 9000, "Debit");
