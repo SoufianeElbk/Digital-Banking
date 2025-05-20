@@ -28,8 +28,8 @@ public class DigitalBankingApplication {
     public static void main(String[] args) {
         SpringApplication.run(DigitalBankingApplication.class, args);
     }
-//    @Bean
-    CommandLineRunner commmadLineRunner(BankAccountService bankAccountService) {
+    // @Bean
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService) {
         return args -> {
             Stream.of("Soufiane", "Abdelkrim", "Mohammed", "Hassan", "Yassine", "Ahmed").forEach(name -> {
                 CustomerDTO customerDTO = new CustomerDTO(null, name, name + "@gmail.com");

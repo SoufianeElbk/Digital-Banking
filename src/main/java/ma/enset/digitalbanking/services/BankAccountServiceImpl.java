@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -216,6 +217,22 @@ public class BankAccountServiceImpl implements BankAccountService {
         return customers.stream().map(customer -> {
             return bankAccountMapper.fromCustomer(customer);
         }).toList();
+    }
+
+    @Override
+    public List<BankAccountDTO> getCustomerAccounts(Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
+        return customer.getBankAccounts()
+                .stream()
+                .map(bankAccount -> {
+                    if (bankAccount instanceof SavingAccount) {
+                        return bankAccountMapper.fromSavingAccount((SavingAccount) bankAccount);
+                    } else {
+                        return bankAccountMapper.fromCurrentAccount((CurrentAccount) bankAccount);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
 

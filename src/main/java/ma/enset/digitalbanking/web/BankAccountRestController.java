@@ -1,11 +1,10 @@
 package ma.enset.digitalbanking.web;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ma.enset.digitalbanking.dtos.AccountHistoryDTO;
-import ma.enset.digitalbanking.dtos.AccountOperationDTO;
-import ma.enset.digitalbanking.dtos.BankAccountDTO;
-import ma.enset.digitalbanking.dtos.CustomerDTO;
+import ma.enset.digitalbanking.dtos.*;
+import ma.enset.digitalbanking.exceptions.BalanceAccountInsufficient;
 import ma.enset.digitalbanking.exceptions.BankAccountNotFoundException;
 import ma.enset.digitalbanking.exceptions.CustomerNotFoundException;
 import ma.enset.digitalbanking.services.BankAccountService;
@@ -38,14 +37,32 @@ public class BankAccountRestController {
 
     @GetMapping("/accounts/{id}/operations")
     public AccountHistoryDTO getHistory(@PathVariable(name = "id") String accountId,
-                                              @RequestParam (name = "page", defaultValue = "0") int page,
-                                              @RequestParam (name = "size", defaultValue = "5") int size) throws BankAccountNotFoundException {
+                                        @RequestParam (name = "page", defaultValue = "0") int page,
+                                        @RequestParam (name = "size", defaultValue = "100") int size) throws BankAccountNotFoundException {
         return bankAccountService.getAccountHistory(accountId, page, size);
     }
 
+    @PostMapping("/accounts/debit")
+    public void debit(@RequestBody DebitDTO debitDTO) throws BankAccountNotFoundException, BalanceAccountInsufficient {
+        bankAccountService.debit(debitDTO.getAccountId(), debitDTO.getAmount(), debitDTO.getDescription());
+    }
 
+    @PostMapping("/accounts/credit")
+    public void credit(@RequestBody CreditDTO creditDTO) throws BankAccountNotFoundException {
+        bankAccountService.credit(creditDTO.getAccountId(), creditDTO.getAmount(), creditDTO.getDescription());
+    }
+
+    @PostMapping("/accounts/transfer")
+    public void transfer(@Valid @RequestBody TransferDTO transferDTO) throws BankAccountNotFoundException, BalanceAccountInsufficient {
+        bankAccountService.transfer(
+                transferDTO.getAccountId(),
+                transferDTO.getAccountDestination(),
+                transferDTO.getAmount());
+    }
+
+    @GetMapping("/customers/{customerId}/accounts")
+    public List<BankAccountDTO> getCustomerAccounts(@PathVariable Long customerId) throws CustomerNotFoundException {
+        return bankAccountService.getCustomerAccounts(customerId);
+    }
 
 }
-
-
-
